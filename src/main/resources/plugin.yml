@@ -1,0 +1,42 @@
+name: HeartsCore
+version: '${version}'
+main: net.bmc.heartscore.HeartsCore
+api-version: '26.3'
+folia-supported: true
+authors: [ BMC Network ]
+description: Folia-ready lifesteal core with withdrawable hearts, GUI management, and an EternalEconomy shop.
+softdepend:
+  - Vault
+  - EternalEconomy
+  - Geyser-Spigot
+  - floodgate
+
+commands:
+  hc:
+    description: HeartsCore main command
+    usage: /hc
+    aliases: [ hearts, heartscore ]
+  hshop:
+    description: Open the heart shop
+    usage: /hshop
+  hcgui:
+    description: Open the hearts GUI
+    usage: /hcgui [admin]
+
+permissions:
+  heartscore.use:
+    default: true
+  heartscore.hearts:
+    default: true
+  heartscore.withdraw:
+    default: true
+  heartscore.shop:
+    default: true
+  heartscore.gui:
+    default: true
+  heartscore.admin:
+    default: op
+  heartscore.admin.gui:
+    default: op
+  heartscore.bypass.antifarm:
+    default: op
