@@ -1,0 +1,205 @@
+# Hearts Core
+
+**Hearts Core** is a lightweight, ultra-performant, and feature-packed Lifesteal plugin engineered specifically for modern Minecraft servers. Built from the ground up with native support for **Folia** and **Paper**, standard server environments as well as multi-threaded regional servers can run it seamlessly without performance bottlenecks.
+
+Featuring modern **MiniMessage** gradient formatting, custom skull head support for **Geyser (Bedrock)**, full GUI management, an automated server economy shop, and extensive configuration options, Hearts Core is the ultimate solution for your Lifesteal SMP.
+
+---
+
+## Key Features
+
+* **Folia & Paper Native Support:** Optimized for multi-threaded performance with zero tick-lag on modern server software.
+* **Interactive Built-in GUIs:** Sleek and easy-to-use menu interfaces for both regular players and administrators (`/hcgui` & `/hcgui admin`).
+* **Seamless Economy Integration:** Automatically hooks into Vault and economy providers (such as **EternalEconomy**) for an automated heart shop (`/hshop`).
+* **Anti-Farm & Combat Protections:** Built-in IP checks, kill cooldowns, and combat-logging punishments to maintain fair gameplay.
+* **Geyser (Bedrock) Friendly:** Native Bedrock skull texture support for seamless cross-platform visual consistency.
+* **Full Customization & MiniMessage Support:** Easily adjust heart limits, combat tags, death punishments, and custom gradient messages using MiniMessage formatting.
+
+---
+
+## Commands & Permissions
+
+### Player Commands
+* `/hc hearts` — View your current heart count and maximum limits.
+* `/hc withdraw <amount>` — Withdraw your hearts into physical item form to store or trade.
+* `/hcgui` — Open the main interactive player GUI menu.
+* `/hshop` — Open the heart shop to buy extra hearts using server currency.
+
+### Admin Commands
+* `/hc admin hearts <player>` — Check a specific player's current heart count.
+* `/hc admin add <player> <amount>` — Grant extra hearts to a player.
+* `/hc admin revoke <player> <amount>` — Remove hearts from a player.
+* `/hcgui admin` — Open the administrative GUI panel to view and edit player hearts visually.
+
+---
+
+## Default Configuration (`config.yml`)
+
+```yaml
+# HeartsCore by BMC Network
+# MiniMessage formatting is supported in all messages and GUI titles.
+
+starting-hearts: 10
+max-hearts: 20
+min-hearts: 0
+
+# How long after PvP damage a player is still considered "in combat".
+# This also allows trap/environmental kills to be credited to the last attacker.
+combat-tag-seconds: 10
+
+anti-farm:
+  enabled: true
+  kill-cooldown-seconds: 300
+  block-same-ip: true
+
+pvp:
+  # DROP   = victim loses hearts and a physical heart item drops.
+  # DIRECT = victim loses hearts and the killer gains hearts directly.
+  mode: DROP
+  heart-loss: 1
+  killer-gain: 1
+
+natural-death:
+  # Natural deaths do NOT drop a heart item by default.
+  heart-loss: 0
+  drop-heart: false
+
+withdraw:
+  max-per-command: 64
+
+zero-heart:
+  # SPECTATOR, KICK, or BAN
+  policy: ban
+  ban-reason: "You ran out of hearts."
+  kick-reason: "You ran out of hearts."
+  restore-gamemode: true
+
+combat-log:
+  punish: false
+  heart-loss: 1
+  drop-heart: false
+
+health:
+  health-scale: true
+  max-display-health: 40.0
+
+heart-item:
+  # Red heart player-head texture.
+  texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWI3NmI0ZWU5ODg1NzIyOTdjYmQ4NzQ2ODNiZWU5NmFlM2M1NWNlOTRjMDA0ZTUxYWRjODJjZWUxNmNkMGIwYyJ9fX0="
+
+shop:
+  enabled: true
+  offers:
+    one:
+      slot: 11
+      hearts: 1
+      price: 1000000.0
+    five:
+      slot: 13
+      hearts: 5
+      price: 5000000.0
+    ten:
+      slot: 15
+      hearts: 10
+      price: 10000000.0
+
+geyser:
+  install-custom-skull: true
+
+messages:
+  prefix: "<gradient:#ff2d55:#ff8fa3><bold>HeartsCore</bold></gradient> <dark_gray>»</dark_gray> "
+
+  no-permission: "%prefix%<red>You don't have permission."
+  player-only: "%prefix%<red>Only players can use this."
+  unknown-command: "%prefix%<red>Unknown subcommand."
+  reloaded: "%prefix%<green>Configuration reloaded."
+
+  hearts: "%prefix%<gray>Hearts: <red>%hearts%</red><dark_gray>/</dark_gray><red>%max%</red>"
+  hearts-other: "%prefix%<gray>%player% has <red>%hearts%</red> hearts."
+
+  withdraw-success: "%prefix%<gray>Withdrew <red>%amount%</red> heart(s)."
+  withdraw-too-many: "%prefix%<red>You cannot withdraw that many hearts."
+  withdraw-invalid: "%prefix%<red>Enter a valid amount."
+  withdraw-limit: "%prefix%<red>You can withdraw at most %max% hearts at a time."
+
+  consumed: "%prefix%<green>You absorbed a heart. Now at <red>%hearts%</red> hearts."
+  max-hearts: "%prefix%<red>You are already at maximum hearts."
+  not-enough-hearts: "%prefix%<red>You don't have enough hearts."
+
+  pvp-death: "%prefix%<red>You were killed by %player% and lost %amount% heart(s)."
+  natural-death: "%prefix%<red>You lost %amount% heart(s). No heart item dropped."
+  killer-stole: "%prefix%<green>You stole %amount% heart(s) from %player%."
+  killer-drop: "%prefix%<green>Your victim dropped %amount% heart(s). Pick them up!"
+  anti-farm-blocked: "%prefix%<red>Anti-farm blocked this heart transfer."
+  combat-log-punished: "%prefix%<red>You lost a heart for combat logging."
+
+  zero-spectator: "%prefix%<red>You ran out of hearts and are now a spectator."
+  zero-kick: "%prefix%<red>You ran out of hearts."
+  zero-ban: "%prefix%<red>You ran out of hearts."
+
+  shop-disabled: "%prefix%<red>The heart shop is disabled."
+  shop-no-economy: "%prefix%<red>No Vault economy provider was found. Install EternalEconomy."
+  shop-insufficient-funds: "%prefix%<red>You need <gold>%price%</gold> to buy this."
+  shop-max: "%prefix%<red>Buying that would exceed the maximum heart limit."
+  shop-bought: "%prefix%<green>Bought <red>%amount%</red> heart(s) for <gold>%price%</gold>."
+
+  admin-added: "%prefix%<green>Added <red>%amount%</red> heart(s) to %player%."
+  admin-removed: "%prefix%<green>Removed <red>%amount%</red> heart(s) from %player%."
+  admin-set: "%prefix%<green>Set %player% to <red>%amount%</red> heart(s)."
+  admin-reset: "%prefix%<green>Reset %player% to <red>%amount%</red> heart(s)."
+  admin-target-not-found: "%prefix%<red>Player not found."
+  admin-invalid-amount: "%prefix%<red>Enter a valid amount."
+
+  gui:
+    main-title: "<dark_red><bold>Hearts Core"
+    admin-title: "<dark_red><bold>Hearts Admin"
+    manage-title: "<dark_red><bold>Manage %player%"
+    shop-title: "<dark_red><bold>Heart Shop"
+
+    heart-name: "<red><bold>❤ Your Hearts"
+    heart-lore-1: "<gray>Hearts: <red>%hearts%</red><dark_gray>/</dark_gray><red>%max%</red>"
+    heart-lore-2: "<gray>Kills: <white>%kills%</white>"
+    heart-lore-3: "<gray>Deaths: <white>%deaths%</white>"
+    heart-lore-4: "<dark_gray>Each heart = 2 HP"
+
+    withdraw-name: "<red><bold>Withdraw 1 Heart"
+    withdraw-lore: "<gray>Right-click to withdraw one heart."
+    withdraw-blocked: "<dark_gray>You cannot withdraw below %min% hearts."
+
+    shop-name: "<green><bold>Heart Shop"
+    shop-lore: "<gray>Buy hearts with EternalEconomy."
+
+    admin-name: "<dark_red><bold>Admin Panel"
+    admin-lore: "<gray>Manage player hearts."
+
+    close-name: "<red><bold>Close"
+    close-lore: "<gray>Close this menu."
+
+    back-name: "<yellow><bold>Back"
+    back-lore: "<gray>Return to the previous menu."
+
+    target-name: "<red><bold>%player%"
+    target-lore-1: "<gray>Hearts: <red>%hearts%</red>"
+    target-lore-2: "<gray>Click a button below to manage."
+
+    add-name: "<green><bold>Add %amount% Heart(s)"
+    add-lore: "<gray>Give hearts to this player."
+
+    remove-name: "<red><bold>Remove %amount% Heart(s)"
+    remove-lore: "<gray>Take hearts from this player."
+
+    reset-name: "<yellow><bold>Reset Hearts"
+    reset-lore: "<gray>Reset to the starting amount."
+
+    player-entry-name: "<white>%player%"
+    player-entry-lore-1: "<gray>Hearts: <red>%hearts%</red>"
+    player-entry-lore-2: "<gray>Click to manage."
+
+    buy-name: "<red><bold>Buy %amount% Heart(s)"
+    buy-lore-1: "<gray>Price: <gold>%price%</gold>"
+    buy-lore-2: "<gray>Click to purchase."
+ ```
+# Requirements & Dependencies
+* Server Software: Paper, Folia, or compatible modern forks.
+* Vault API: Required for economy shop integration.
+* Economy Provider: Any Vault-compatible economy plugin (e.g.,EssentialsX EternalEconomy).
